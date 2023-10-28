@@ -8,21 +8,32 @@
 * The running time of your algorithm should be � log ⁡ � mlogn or better and use extra space proportional to � n.
 * */
 
-// i am gonna be using weighted quick-union
+// I am gonna be using weighted quick-union
 public class SocialNetwork {
-    private int[] friends;
-
+    final private int[] friends;
+    final private int[] friendsTreeSize;
     public SocialNetwork(int n) {
         friends = new int[n];
+        friendsTreeSize = new int[n];
         for (int i = 0; i < n; i++) {
             friends[i] = i;
         }
     }
 
     public void union(int index1, int index2) {
+        int size = 1;
         while (friends[index2] != index2) {
             index2 = friends[index2];
+            size++;
         }
+        friendsTreeSize[index2] = size;
+        size = 1;
+        while (friends[index1] != index1) {
+            index1 = friends[index1];
+            size++;
+        }
+        friendsTreeSize[index1] = size;
+        
         // set index2 parent to index1
         friends[index2] = index1;
     }
@@ -43,7 +54,7 @@ public class SocialNetwork {
         return root1 == root2;
     }
 
-    public boolean AreAllFriends() {
+    public boolean checkIfAllFriends() {
 
         return false;
     }
