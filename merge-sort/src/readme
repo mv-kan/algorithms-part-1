@@ -1,0 +1,31 @@
+Test 2b: random horizontal line segments
+  *  1 random horizontal line segment
+  *  5 random horizontal line segments
+    - number of entries in student   solution: 4
+    - number of entries in reference solution: 5
+    - 1 missing entry in student solution:
+      '(2327, 1299) -> (4730, 1299) -> (17937, 1299) -> (19681, 1299)'
+
+
+    - failed on trial 1 of 250
+     20
+     17585  5679
+     18344  7452
+     18033 17517
+      4730  1299
+      4640  5679
+     19681  1299
+      1785  5679
+      2327  1299
+      7525  7452
+      1746 17517
+     17413 11907
+      7780  7452
+     17937  1299
+     16151 11907
+      6295 11907
+     17074  7452
+      3561 11907
+      5352 17517
+     10113  5679
+      6906 17517

@@ -69,11 +69,14 @@ public class FastCollinearPoints {
         }
     }
     // finds all line segments containing 4 points
-    public FastCollinearPoints(Point[] points) {
-        lineSegments = new LineSegment[1];
-        if (points == null) {
+    public FastCollinearPoints(Point[] points_) {
+        if (points_ == null) {
             throw new IllegalArgumentException();
         }
+        Point[] points = new Point[points_.length];
+        System.arraycopy(points_, 0, points, 0, points_.length);
+        lineSegments = new LineSegment[1];
+
         // check for duplicates
         for (int i = 0; i < points.length; i++) {
             if (points[i] == null) {
@@ -100,6 +103,7 @@ public class FastCollinearPoints {
             double slope = 0;
             boolean isFirst = true;
             boolean thisSlopeToSkip = false;
+            int indexStartOfCombo = 0;
             // calculate point
             for (int j = 0; j < points.length; j++) {
                 if (pCopy[j].compareTo(p) == 0)
@@ -110,23 +114,26 @@ public class FastCollinearPoints {
                     }
                     isFirst = false;
                     slope = p.slopeTo(pCopy[j]);
+                    indexStartOfCombo = j;
+                    combo++;
                     continue;
                 }
                 combo++;
+                if (pCopy[j].compareTo(p) > 0 && slope == p.slopeTo(pCopy[j])) {
+                    thisSlopeToSkip = true;
+                    combo = 1;
+                }
                 if (slope != p.slopeTo(pCopy[j]) || j + 1 == points.length) {
-                    if (thisSlopeToSkip || pCopy[j].compareTo(p) > 0) {
-                        combo = 0;
+                    if (thisSlopeToSkip) {
+                        combo = 1;
+                        indexStartOfCombo = j;
                         thisSlopeToSkip = false;
                     }
                     if (combo >= 3) {
-                        addToLineSegments(new LineSegment(p, pCopy[j - combo]));
+                        addToLineSegments(new LineSegment(p, pCopy[indexStartOfCombo]));
                     }
-                    combo = 0;
-                } else {
-                    if (pCopy[j].compareTo(p) > 0) {
-                        thisSlopeToSkip = true;
-                        combo = 0;
-                    }
+                    indexStartOfCombo = j;
+                    combo = 1;
                 }
                 slope = p.slopeTo(pCopy[j]);
             }
@@ -156,16 +163,19 @@ public class FastCollinearPoints {
         }
 
         // draw the points
+        StdDraw.setPenRadius(0.01);
+        StdDraw.setPenColor(StdDraw.RED);
         StdDraw.enableDoubleBuffering();
-        StdDraw.setXscale(0, 32768);
-        StdDraw.setYscale(0, 32768);
+        StdDraw.setXscale(0, 20000);
+        StdDraw.setYscale(0, 20000);
         for (Point p : points) {
             p.draw();
         }
         StdDraw.show();
-
+        StdDraw.setPenRadius(0.005);
         // print and draw the line segments
         FastCollinearPoints collinear = new FastCollinearPoints(points);
+        StdDraw.setPenColor(StdDraw.BLACK);
         for (LineSegment segment : collinear.segments()) {
             StdOut.println(segment);
             segment.draw();

@@ -42,7 +42,13 @@ public class BruteCollinearPoints {
         }
     }
     // finds all line segments containing 4 points
-    public BruteCollinearPoints(Point[] points) {
+    public BruteCollinearPoints(Point[] points_) {
+        if (points_ == null) {
+            throw new IllegalArgumentException();
+        }
+        Point[] points = new Point[points_.length];
+        System.arraycopy(points_, 0, points, 0, points_.length);
+
         lineSegments = new LineSegment[1];
         if (points == null) {
             throw new IllegalArgumentException();
@@ -53,7 +59,7 @@ public class BruteCollinearPoints {
                 throw new IllegalArgumentException();
             }
             for (int j = i + 1; j < points.length; j++) {
-                if (points[i] == points[j]) {
+                if (points[i].compareTo(points[j]) == 0) {
                     throw new IllegalArgumentException();
                 }
             }
